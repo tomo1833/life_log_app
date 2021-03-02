@@ -38,19 +38,20 @@ class GoogleCalendarModel {
 
     Event event;
 
-     var _result = [];
+    var resultList = [];
 
     switch (type) {
       case BUTTON_TYPE_START:
         event = GoogleCalendarEvent(summary);
         await calendar.events.insert(event, calendarId).then((value) {
           if (value.status == "confirmed") {
-            _result[0] = true;
-            _result[1] = 'カレンダーに登録しました。';
+            resultList.add(true);
+            resultList.add('カレンダーに登録しました。');
+            print(resultList);
             print('Successful addition of events');
           } else {
-            _result[0] = false;
-            _result[1] = 'カレンダーに登録できませんでした';
+            resultList.add(false);
+            resultList.add('カレンダーに登録できませんでした');
             print("Event addition failure");
           }
         });
@@ -79,9 +80,9 @@ class GoogleCalendarModel {
         });
 
         if (count == 0) {
-          _result[0] = true;
-          _result[1] = '終了時間を更新するイベントがありませんでした。';
-          return _result;
+          resultList.add(true);
+          resultList.add('終了時間を更新するイベントがありませんでした。');
+          return resultList;
         }
         // set end time to now
         event.end = GoogleCalendarEvent.setEndDateTimeOfEnd();
@@ -89,12 +90,12 @@ class GoogleCalendarModel {
         // event update
         await calendar.events.update(event, calendarId, event.id).then((value) {
           if (value.status == "confirmed") {
-            _result[0] = true;
-            _result[1] = 'カレンダーに登録しました。';
+            resultList.add(true);
+            resultList.add('カレンダーに登録しました。');
             print('Successful addition of events');
           } else {
-            _result[0] = false;
-            _result[1] = 'カレンダーに登録できませんでした';
+            resultList[0] = false;
+            resultList[1] = 'カレンダーに登録できませんでした';
             print("Event addition failure");
           }
         });
@@ -102,6 +103,6 @@ class GoogleCalendarModel {
       default:
         break;
     }
-    return _result;
+    return resultList;
   }
 }
